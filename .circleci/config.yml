@@ -42,7 +42,7 @@ jobs:
           name: Front-End Test
           command: |
             echo "TODO: Test the frontend "
-           # npm run frontend:test
+          # npm run frontend:test
         # TODO: E2E the frontend
       - run:
           name: Front-End E2E
@@ -74,13 +74,13 @@ jobs:
       - aws-cli/setup
       - checkout
       - run:
-           name: Front-End Deploy
+          name: Front-End Deploy
           # TODO: Install, build, deploy Front-End
           command: |
             echo "# TODO: Install, build, deploy Front-End"
             npm run frontend:deploy
       - run:
-          name:  Back-End Deploy
+          name: Back-End Deploy
           # TODO: Install, build, deploy Back-End
           command: |
             echo "# TODO: Install, build, deployBack-End"
