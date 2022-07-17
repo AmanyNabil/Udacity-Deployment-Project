@@ -4,6 +4,7 @@ orbs:
   node: circleci/node@5.0.2
   eb: circleci/aws-elastic-beanstalk@2.0.1
   aws-cli: circleci/aws-cli@3.1.1
+  eslint: arrai/eslint@7.4.0
   # different jobs are calles later in the workflows sections
 jobs:
   build:
@@ -35,17 +36,32 @@ jobs:
           name: Front-End Lint
           command: |
             echo "TODO: Lint the frontend "
-          # npm run frontend:lint
+            npm run frontend:lint
+      # TODO: Test the frontend
+      - run:
+          name: Front-End Test
+          command: |
+            echo "TODO: Test the frontend "
+            npm run frontend:test
+        # TODO: E2E the frontend
+      - run:
+          name: Front-End E2E
+          command: |
+            echo "TODO: E2E the frontend "
+            npm run frontend:e2e
+
       # TODO: Build the frontend app
       - run:
           name: Front-End Build
           command: |
             echo "TODO: Build the frontend app"
+            npm run frontend:build
       # TODO: Build the backend API
       - run:
           name: API Build
           command: |
             echo "TODO: Build the backend API"
+            npm run api:build
   # deploy step will run only after manual approval
   deploy:
     docker:
