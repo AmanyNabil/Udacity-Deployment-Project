@@ -36,19 +36,19 @@ jobs:
           name: Front-End Lint
           command: |
             echo "TODO: Lint the frontend "
-          #   npm run frontend:lint
+              npm run frontend:lint
       # TODO: Test the frontend
       - run:
           name: Front-End Test
           command: |
             echo "TODO: Test the frontend "
           # npm run frontend:test
-        # TODO: E2E the frontend
+          TODO: E2E the frontend
       - run:
           name: Front-End E2E
           command: |
             echo "TODO: E2E the frontend "
-          #  npm run frontend:e2e
+            npm run frontend:e2e
 
       # TODO: Build the frontend app
       - run:
