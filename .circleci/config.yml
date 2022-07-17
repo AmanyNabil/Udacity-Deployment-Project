@@ -48,7 +48,7 @@ jobs:
           name: Front-End E2E
           command: |
             echo "TODO: E2E the frontend "
-            npm run frontend:e2e
+          #  npm run frontend:e2e
 
       # TODO: Build the frontend app
       - run:
