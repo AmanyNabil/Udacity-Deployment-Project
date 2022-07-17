@@ -42,13 +42,13 @@ jobs:
           name: Front-End Test
           command: |
             echo "TODO: Test the frontend "
-            npm run frontend:test
+           # npm run frontend:test
         # TODO: E2E the frontend
       - run:
           name: Front-End E2E
           command: |
             echo "TODO: E2E the frontend "
-            npm run frontend:e2e
+          #  npm run frontend:e2e
 
       # TODO: Build the frontend app
       - run:
@@ -74,10 +74,17 @@ jobs:
       - aws-cli/setup
       - checkout
       - run:
-          name: Deploy App
-          # TODO: Install, build, deploy in both apps
+           name: Front-End Deploy
+          # TODO: Install, build, deploy Front-End
           command: |
-            echo "# TODO: Install, build, deploy in both apps"
+            echo "# TODO: Install, build, deploy Front-End"
+            npm run frontend:deploy
+      - run:
+          name:  Back-End Deploy
+          # TODO: Install, build, deploy Back-End
+          command: |
+            echo "# TODO: Install, build, deployBack-End"
+            npm run api:deploy
 
 workflows:
   udagram:
