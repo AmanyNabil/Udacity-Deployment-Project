@@ -31,7 +31,7 @@ jobs:
           command: |
             echo "TODO: Install dependencies in the the backend API  "
             npm run api:install
-      # TODO: Lint the frontend
+      # xTODO: Lint the frontend
       - run:
           name: Front-End Lint
           command: |
@@ -88,18 +88,18 @@ jobs:
             echo "# TODO: Install, build, deploy Front-End"
             #  npm run frontend:deploy
 
-workflows:
-  udagram:
-    jobs:
-      - build
-      - hold:
-          filters:
-            branches:
-              only:
-                - master
-          type: approval
-          requires:
-            - build
-      - deploy:
-          requires:
-            - hold
+# workflows:
+#   udagram:
+#     jobs:
+#       - build
+#       - hold:
+#           filters:
+#             branches:
+#               only:
+#                 - master
+#           type: approval
+#           requires:
+#             - build
+#       - deploy:
+#           requires:
+#             - hold
