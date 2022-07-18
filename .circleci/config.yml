@@ -72,16 +72,16 @@ jobs:
     steps:
       - node/install:
           node-version: "14.15"
-      # - eb/setup
+       - eb/setup
       - aws-cli/setup
       - checkout
 
-      # - run:
-      #     name: Back-End Deploy
-      #     # TODO: Install, build, deploy Back-End
-      #     command: |
-      #       echo "# TODO: Install, build, deployBack-End"
-      #       npm run api:deploy
+      - run:
+          name: Back-End Deploy
+          # TODO: Install, build, deploy Back-End
+          command: |
+            echo "# TODO: Install, build, deployBack-End"
+            npm run api:deploy
 
       - run:
           name: Front-End Deploy
@@ -93,8 +93,7 @@ jobs:
 workflows:
   udagram:
     jobs:
-      # - build
-      - deploy
-      # :
-      #     requires:
-      #       - build
+      - build
+      - deploy :
+          requires:
+            - build
