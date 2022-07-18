@@ -15,7 +15,6 @@ jobs:
       # install node and checkout code
       - node/install
       - aws-cli/setup
-      #      - eb/setup
       - checkout
 
       # Use root level package.json to install dependencies in the frontend app
@@ -65,21 +64,7 @@ jobs:
             echo "TODO: Build the backend API"
             npm run api:build
 
-      - run:
-          name: Back-End Deploy
-          # TODO: Install, build, deploy Back-End
-          command: |
-            echo "# TODO: Install, build, deployBack-End"
-            npm run api:deploy
-
-      - run:
-          name: Front-End Deploy
-          # TODO: Install, build, deploy Front-End
-          command: |
-            echo "# TODO: Install, build, deploy Front-End"
-              npm run frontend:deploy
-
-  #deploy step will run only after manual approval
+  #deploy step will run after build job
   deploy:
     docker:
       - image: "cimg/base:stable"
@@ -109,14 +94,6 @@ workflows:
   udagram:
     jobs:
       - build
-      # - hold:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      #     type: after
-      #     requires:
-      #       - build
       - deploy:
           requires:
             - build
