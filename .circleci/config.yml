@@ -93,7 +93,8 @@ jobs:
 workflows:
   udagram:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+      # - build
+      - deploy
+      # :
+      #     requires:
+      #       - build
