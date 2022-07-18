@@ -13,10 +13,9 @@ jobs:
       - image: "cimg/node:14.15"
     steps:
       # install node and checkout code
-      - node/install:
-          node-version: "14.15"
+      - node/install
       - aws-cli/setup
-      - eb/setup
+      #      - eb/setup
       - checkout
 
       # Use root level package.json to install dependencies in the frontend app
@@ -80,44 +79,44 @@ jobs:
             echo "# TODO: Install, build, deploy Front-End"
               npm run frontend:deploy
 
-  # deploy step will run only after manual approval
-  # deploy:
-  #   docker:
-  #     - image: "cimg/base:stable"
-  #     # more setup needed for aws, node, elastic beanstalk
-  #   steps:
-  #     - node/install:
-  #         node-version: "14.15"
-  #     - eb/setup
-  #     - aws-cli/setup
-  #     - checkout
+  #deploy step will run only after manual approval
+  deploy:
+    docker:
+      - image: "cimg/base:stable"
+      # more setup needed for aws, node, elastic beanstalk
+    steps:
+      - node/install:
+          node-version: "14.15"
+      - eb/setup
+      - aws-cli/setup
+      - checkout
 
-  #     - run:
-  #         name: Back-End Deploy
-  #         # TODO: Install, build, deploy Back-End
-  #         command: |
-  #           echo "# TODO: Install, build, deployBack-End"
-  #         #   npm run api:deploy
+      - run:
+          name: Back-End Deploy
+          # TODO: Install, build, deploy Back-End
+          command: |
+            echo "# TODO: Install, build, deployBack-End"
+            npm run api:deploy
 
-  #     - run:
-  #         name: Front-End Deploy
-  #         # TODO: Install, build, deploy Front-End
-  #         command: |
-  #           echo "# TODO: Install, build, deploy Front-End"
-  #           #  npm run frontend:deploy
+      - run:
+          name: Front-End Deploy
+          # TODO: Install, build, deploy Front-End
+          command: |
+            echo "# TODO: Install, build, deploy Front-End"
+            npm run frontend:deploy
 
 workflows:
   udagram:
     jobs:
       - build
-      # - hold:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      #     type: approval
-      #     requires:
-      #       - build
-      # - deploy:
-      #     requires:
-      #       - hold
+      - hold:
+          filters:
+            branches:
+              only:
+                - master
+          type: after
+          requires:
+            - build
+      - deploy:
+          requires:
+            - hold
