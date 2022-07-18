@@ -31,11 +31,11 @@ jobs:
           command: |
             echo "TODO: Install dependencies in the the backend API  "
             npm run api:install
-      # TODO: Lint the frontend
-      # - run:
-      #     name: Front-End Lint
-      #     command: |
-      #       echo "TODO: Lint the frontend "
+      TODO: Lint the frontend
+      - run:
+          name: Front-End Lint
+          command: |
+            echo "TODO: Lint the frontend "
 
       # TODO: Test the frontend
       - run:
@@ -73,19 +73,21 @@ jobs:
       - eb/setup
       - aws-cli/setup
       - checkout
-      - run:
-          name: Front-End Deploy
-          # TODO: Install, build, deploy Front-End
-          command: |
-            echo "# TODO: Install, build, deploy Front-End"
-            npm run frontend:deploy
+      
       - run:
           name: Back-End Deploy
           # TODO: Install, build, deploy Back-End
           command: |
             echo "# TODO: Install, build, deployBack-End"
-            npm run api:deploy
+         #   npm run api:deploy
 
+      - run:
+          name: Front-End Deploy
+          # TODO: Install, build, deploy Front-End
+          command: |
+            echo "# TODO: Install, build, deploy Front-End"
+           #  npm run frontend:deploy
+      
 workflows:
   udagram:
     jobs:
