@@ -14,6 +14,7 @@ jobs:
     steps:
       # install node and checkout code
       - node/install
+      - eb/setup
       - aws-cli/setup
       - checkout
 
@@ -63,19 +64,6 @@ jobs:
           command: |
             echo "TODO: Build the backend API"
             npm run api:build
-
-  #deploy step will run after build job
-  deploy:
-    docker:
-      - image: "cimg/base:stable"
-      # more setup needed for aws, node, elastic beanstalk
-    steps:
-      - node/install:
-          node-version: "14.15"
-      - eb/setup
-      - aws-cli/setup
-      - checkout
-
       - run:
           name: Back-End Deploy
           # TODO: Install, build, deploy Back-End
@@ -89,11 +77,30 @@ jobs:
           command: |
             echo "# TODO: Install, build, deploy Front-End"
             npm run frontend:deploy
-
 workflows:
-  udagram:
+  basic-workflow:
     jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+      - build:
+          filters:
+            branches:
+              only: main
+
+  #deploy step will run after build job
+#   deploy:
+#     docker:
+#       - image: "cimg/base:stable"
+#       # more setup needed for aws, node, elastic beanstalk
+#     steps:
+#       - node/install:
+#           node-version: "14.15"
+#       - eb/setup
+#       - aws-cli/setup
+#       - checkout
+
+# workflows:
+#   udagram:
+#     jobs:
+#       - build
+#       # - deploy:
+#       #     requires:
+#       #       - build
