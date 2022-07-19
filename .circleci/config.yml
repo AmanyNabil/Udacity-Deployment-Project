@@ -63,19 +63,7 @@ jobs:
           command: |
             echo "TODO: Build the backend API"
             npm run api:build
-      - run:
-          name: Back-End Deploy
-          # TODO: Install, build, deploy Back-End
-          command: |
-            echo "# TODO: Install, build, deployBack-End"
-            npm run api:deploy
 
-      - run:
-          name: Front-End Deploy
-          # TODO: Install, build, deploy Front-End
-          command: |
-            echo "# TODO: Install, build, deploy Front-End"
-            npm run frontend:deploy
   #deploy step will run after build job
   deploy:
     docker:
