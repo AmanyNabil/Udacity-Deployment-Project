@@ -85,12 +85,7 @@ jobs:
 
       - run:
           name: Front-End Deploy
-          # TODO: Install, build, deploy Front-End
-          command: |
-            echo "# TODO: Install, build, deploy Front-End"
-            npm run frontend:deploy
-
-workflows:
+          # TODO: Install, build, deploy Front
   udagram:
     jobs:
       - build
