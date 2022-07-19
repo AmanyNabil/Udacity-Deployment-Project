@@ -84,23 +84,3 @@ workflows:
           filters:
             branches:
               only: main
-
-  #deploy step will run after build job
-#   deploy:
-#     docker:
-#       - image: "cimg/base:stable"
-#       # more setup needed for aws, node, elastic beanstalk
-#     steps:
-#       - node/install:
-#           node-version: "14.15"
-#       - eb/setup
-#       - aws-cli/setup
-#       - checkout
-
-# workflows:
-#   udagram:
-#     jobs:
-#       - build
-#       # - deploy:
-#       #     requires:
-#       #       - build
