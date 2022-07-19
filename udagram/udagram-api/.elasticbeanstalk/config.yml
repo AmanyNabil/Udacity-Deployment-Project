@@ -16,5 +16,3 @@ global:
   repository: null
   sc: null
   workspace_type: Application
-  deploy:
-    artifact: www/Archive.zip
