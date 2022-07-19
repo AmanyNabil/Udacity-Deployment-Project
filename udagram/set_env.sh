@@ -1,12 +1,14 @@
-# This file is used for convenience of local development.
-# DO NOT STORE YOUR CREDENTIALS INTO GIT
+export POSTGRES_HOST=database-1.cyr69zbm7l8i.us-east-1.rds.amazonaws.com
+export DB_PORT=5432
 export POSTGRES_USERNAME=postgres
 export POSTGRES_PASSWORD=postgres
-export POSTGRES_HOST=database-1.cyr69zbm7l8i.us-east-1.rds.amazonaws.com
-export PORT = 5432
 export POSTGRES_DB=postgres
-export AWS_BUCKET=arn:aws:s3:::udagram-ui-bucket
+export PORT=3000
+export RDS_DIALECT=postgres
 export AWS_REGION=us-east-1
 export AWS_PROFILE=default
+export URL=env-udagram-api.eba-aandpid2.us-east-1.elasticbeanstalk.com/
 export JWT_SECRET=secret123
-export URL=udagram-ui-bucket.s3-website-us-east-1.amazonaws.com/
+export AWS_BUCKET=arn:aws:s3:::udagram-ui-bucket
+export EB_APP=udagram-api
+export EB_ENV=env-udagram-api
