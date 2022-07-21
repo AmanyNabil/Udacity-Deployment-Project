@@ -1,72 +1,188 @@
-# Hosting a Full-Stack Application
+# Udagram Project
 
-### **You can use you own project completed in previous courses or use the provided Udagram app for completing this final project.**
+## Description
 
----
+This document focused on How to deploy the full stack project to a cloud service Provider (AWS) so that is available to users.
 
-In this project you will learn how to take a newly developed Full-Stack application built for a retailer and deploy it to a cloud service provider so that it is available to customers. You will use the aws console to start and configure the services the application needs such as a database to store product information and a web server allowing the site to be discovered by potential customers. You will modify your package.json scripts and replace hard coded secrets with environment variables in your code.
+This application contains the main components of a 3-tier full stack application (UI, API, and Database).
 
-After the initial setup, you will learn to interact with the services you started on aws and will deploy manually the application a first time to it. As you get more familiar with the services and interact with them through a CLI, you will gradually understand all the moving parts.
+## Instructions
 
-You will then register for a free account on CircleCi and connect your Github account to it. Based on the manual steps used to deploy the app, you will write a config.yml file that will make the process reproducible in CircleCi. You will set up the process to be executed automatically based when code is pushed on the main Github branch.
+- Add all dependence packages that needed for both backend and frontend project in `package.json`.
+- Add all commands and scripts that needed to install, build and test in the Package.json for both backend and frontend project.
+- we must run the App locally firstly to check if it's run successfly and solve any errors accures
 
-The project will also include writing documentation and runbooks covering the operations of the deployment process. Those runbooks will serve as a way to communicate with future developers and anybody involved in diagnosing outages of the Full-Stack application.
+## Installation
 
-# Udagram
+- use `npm install .` to install all packages.
 
-This application is provided to you as an alternative starter project if you do not wish to host your own code done in the previous courses of this nanodegree. The udagram application is a fairly simple application that includes all the major components of a Full-Stack web application.
+## Access URLs
 
+- S3 Bucket `http://udagram-ui-bucket.s3-website-us-east-1.amazonaws.com`
+- EB `env-udagram-api.eba-e3ym2p22.us-east-1.elasticbeanstalk.com`
+- RDS `database-1.cyr69zbm7l8i.us-east-1.rds.amazonaws.com`
+- Github URL `https://github.com/AmanyNabil/Udacity-Deployment-Project`
 
+## Steps of Creation AWS Services
 
-### Dependencies
+1.  Create AWS RDS for DB
 
-```
-- Node v14.15.1 (LTS) or more recent. While older versions can work it is advisable to keep node to latest LTS version
+    Update env Variable with DB Endpoint & port that created on AWS
 
-- npm 6.14.8 (LTS) or more recent, Yarn can work but was not tested for this project
+        ```
+        POSTGRES_HOST=database-1.cyr69zbm7l8i.us-east-1.rds.amazonaws.com
+        DB_PORT=5432
+        POSTGRES_DB=postgres
+        POSTGRES_USERNAME=postgres
+        POSTGRES_PASSWORD=********
 
-- AWS CLI v2, v1 can work but was not tested for this project
+        ```
 
-- A RDS database running Postgres.
+2.  Create AWS EB application and environment for Backend project using terminal or AWS console
+    - create EB command using terminal
+      ```bash
+      eb init udagram-api --platform node.js --region us-east-1
+      eb create env-udagram-api
+      ```
+    - update env variable `URL=env-udagram-api.eba-e3ym2p22.us-east-1.elasticbeanstalk.com`
+    - update `udagram-frontend\src\environments\environment.ts` & `udagram-frontend\src\environments\environment.prod.ts` with eb app name and apiHost to connect frontend project with backend project
+      ```ts
+      appName: "udagram-api",
+      apiHost:
+      "env-udagram-api.eba-e3ym2p22.us-east-1.elasticbeanstalk.com/api/v0"
+      ```
+3.  Create S3 Bucket for Frontend Project
 
-- A S3 bucket for hosting uploaded pictures.
+4.  Create CircleCI Account
 
-```
+5.  connct CircleCI with Github Account and the required project
 
-### Installation
+6.
 
-Provision the necessary AWS services needed for running the application:
+## Pipeline Configration
 
-1. In AWS, provision a publicly available RDS database running Postgres. <Place holder for link to classroom article>
-1. In AWS, provision a s3 bucket for hosting the uploaded files. <Place holder for tlink to classroom article>
-1. Export the ENV variables needed or use a package like [dotnev](https://www.npmjs.com/package/dotenv)/.
-1. From the root of the repo, navigate udagram-api folder `cd starter/udagram-api` to install the node_modules `npm install`. After installation is done start the api in dev mode with `npm run dev`.
-1. Without closing the terminal in step 1, navigate to the udagram-frontend `cd starter/udagram-frontend` to intall the node_modules `npm install`. After installation is done start the api in dev mode with `npm run start`.
+- Add `bin\deploy.sh` file in both Backend and frontend Projects that has all depolyment commands.
+  - backend `deploy.sh` file
+    ```
+    eb init udagram-api --platform node.js --region us-east-1 &&
+    eb use env-udagram-api &&
+    eb deploy env-udagram-api &&
+    eb setenv POSTGRES_HOST=$POSTGRES_HOST POSTGRES_USERNAME=$POSTGRES_USERNAME POSTGRES_PASSWORD=$POSTGRES_PASSWORD POSTGRES_DB=$POSTGRES_DB PORT=$PORT URL=$URL JWT_SECRET=$JWT_SECRET
+    ```
+  - frontend `deploy.sh` file
+    ```
+    aws s3 cp --recursive --acl public-read ./www s3://udagram-ui-bucket/ &&
+    aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./www/index.html s3://udagram-ui-bucket/
+    ```
+- add Deploy script in `package.json` for both projects.
+  ```json
+  "deploy": "chmod +x bin/deploy.sh && bin/deploy.sh ",
+  ```
+- In Root folder `udagram` add `package.json` that has scripts to call backend and frontend scripts.
+  ```json
+  "scripts": {
+      "frontend:install": "cd udagram/udagram-frontend && npm install -f",
+      "frontend:start": "cd udagram/udagram-frontend && npm run start",
+      "frontend:build": "cd udagram/udagram-frontend && npm run build",
+      "frontend:test": "cd udagram/udagram-frontend && npm run test",
+      "frontend:e2e": "cd udagram/udagram-frontend && npm run e2e",
+      "frontend:lint": "cd udagram/udagram-frontend && npm run lint",
+      "frontend:deploy": "cd udagram/udagram-frontend && npm run deploy",
+      "api:install": "cd udagram/udagram-api && npm install .",
+      "api:build": "cd udagram/udagram-api && npm run build",
+      "api:start": "cd udagram/udagram-api && npm run dev",
+      "api:deploy": "cd udagram/udagram-api && npm run deploy"
+  }
+  ```
+- Initialize Env Variables in circle CI.
+- create `.circleci\config.yml` in the Root Folder
 
-## Testing
+  ```yml
+  version: 2.1
+      orbs:
+      # orgs contain basc recipes and reproducible actions (install node, aws, etc.)
+      node: circleci/node@5.0.2
+      eb: circleci/aws-elastic-beanstalk@2.0.1
+      aws-cli: circleci/aws-cli@3.1.1
 
-This project contains two different test suite: unit tests and End-To-End tests(e2e). Follow these steps to run the tests.
+      # different jobs are calles later in the workflows sections
+      jobs:
+      build:
+          docker:
+          # the base image can run most needed actions with orbs
+          - image: "cimg/node:14.15"
+          steps:
+          # install node and checkout code
+          - node/install
+          - eb/setup
+          - aws-cli/setup
+          - checkout
 
-1. `cd starter/udagram-frontend`
-1. `npm run test`
-1. `npm run e2e`
+          # Use root level package.json to install dependencies in the frontend app
+          - run:
+              name: Install Front-End Dependencies
+              command: |
+                  echo "NODE --version"
+                  echo $(node --version)
+                  echo "NPM --version"
+                  echo $(npm --version)
+                  npm run frontend:install
+          # TODO: Install dependencies in the the backend API
+          - run:
+              name: Install API Dependencies
+              command: |
+                  echo "TODO: Install dependencies in the the backend API  "
+                  npm run api:install
+          # xTODO: Lint the frontend
+          - run:
+              name: Front-End Lint
+              command: |
+                  echo "TODO: Lint the frontend "
 
-There are no Unit test on the back-end
+          # TODO: Test the frontend
+          - run:
+              name: Front-End Test
+              command: |
+                  echo "TODO: Test the frontend "
+              # npm run frontend:test
+              TODO: E2E the frontend
+          - run:
+              name: Front-End E2E
+              command: |
+                  echo "TODO: E2E the frontend "
+              #  npm run frontend:e2e
 
-### Unit Tests:
+          # TODO: Build the frontend app
+          - run:
+              name: Front-End Build
+              command: |
+                  echo "TODO: Build the frontend app"
+                  npm run frontend:build
+          # TODO: Build the backend API
+          - run:
+              name: API Build
+              command: |
+                  echo "TODO: Build the backend API"
+                  npm run api:build
+          - run:
+              name: Back-End Deploy
+              # TODO: Install, build, deploy Back-End
+              command: |
+                  echo "# TODO: Install, build, deployBack-End"
+                  npm run api:deploy
 
-Unit tests are using the Jasmine Framework.
+          - run:
+              name: Front-End Deploy
+              # TODO: Install, build, deploy Front-End
+              command: |
+                  echo "# TODO: Install, build, deploy Front-End"
+                  npm run frontend:deploy
+      workflows:
+      basic-workflow:
+          jobs:
+          - build:
+              filters:
+                  branches:
+                  only: main
 
-### End to End Tests:
-
-The e2e tests are using Protractor and Jasmine.
-
-## Built With
-
-- [Angular](https://angular.io/) - Single Page Application Framework
-- [Node](https://nodejs.org) - Javascript Runtime
-- [Express](https://expressjs.com/) - Javascript API Framework
-
-## License
-
-[License](LICENSE.txt)
+  ```
